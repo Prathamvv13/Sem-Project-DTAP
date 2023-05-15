@@ -11,7 +11,71 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
+<script>
+  // const micBtn = document.getElementById('mic-btn');
+  const speechToText = document.getElementById('SpeechToText');
+  let recognition; // Declare the recognition variable globally
+
+      // function toggleRecognition() {
+      //     console.log("toggleRecognition")
+      //     if (recognition && recognition.running) {
+      //         console.log("pause called")
+      //         pause();
+      //     } else {
+      //         console.log("Record called")
+      //         record();
+      //     }
+      // }
+  
+  function record() {
+      var recognition = new webkitSpeechRecognition();
+      // recognition.lang = "en-GB";
+      recognition.lang = window.navigator.language;
+      recognition.onresult = function (event) {
+          console.log(event);
+          document.getElementById('SpeechToText').value = event.results[0][0].transcript;
+      }
+
+      recognition.start();
+      console.log('Recognition Started!');
+
+      // var wave = document.querySelector('.wave');
+      // wave.style.opacity = '0.8';
+      var recordingAnimation = document.getElementById('recording-animation');
+      var microphoneIcon = document.getElementById('microphone-icon');
+
+      recordingAnimation.style.display = 'block';
+      microphoneIcon.classList.add('recording');
+  }
+  function pause() {
+      var recognition1 = new webkitSpeechRecognition();
+      recognition1.stop();
+      console.log('Recognition stopped!');
+      var spokenText = document.getElementById('SpeechToText').value;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://127.0.0.1:5000/voiceip");
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.send(JSON.stringify({ spoken: spokenText }));
+
+      // var wave = document.querySelector('.wave');
+      // wave.style.opacity = '0';
+      var recordingAnimation = document.getElementById('recording-animation');
+      var microphoneIcon = document.getElementById('microphone-icon');
+
+      recordingAnimation.style.display = 'none';
+      microphoneIcon.classList.remove('recording');
+  }
+  // function sendText() {
+  //     var text = document.getElementById('SpeechToText').value;
+  //     console.log(text);
+  //     var xhr = new XMLHttpRequest();
+  //     xhr.open('POST', '/speech', true);
+  //     xhr.setRequestHeader('Content-Type', 'application/json');
+  //     xhr.send(JSON.stringify({'text': text}));
+  // }
+</script>
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
+
 
 <head>
   <meta charset="utf-8" />
@@ -43,6 +107,10 @@
 
 <body class="presentation-page bg-gray-200">
 
+
+
+<br>
+
   {% include 'includes/navigation.html' %}
   <!-- style="background-image: url('/static/assets/img/bg2.jpg')" -->
   <header class="header-2">
@@ -67,8 +135,9 @@
             <p>Files Supported: .pptx</p>
             <!-- <input type="file" accept=".doc,.docx,.pdf" id="fileID" > -->
             <form action="http://127.0.0.1:5000/upload" method="POST" enctype="multipart/form-data">
-              <input type="file" class="btn bg-gradient-info my-2 mb-2" />
-              <input action="/present" type="submit" class="btn bg-gradient-info my-2 mb-2"/>
+              <input type="file" name = "file" class="btn bg-gradient-info my-2 mb-2" />
+              <input type="submit" class="btn bg-gradient-info my-2 mb-2"/>
+              <!-- <input action="/present" type="submit" class="btn bg-gradient-info my-2 mb-2"/> -->
             </form>
           </div>
         </div>
@@ -106,6 +175,18 @@
         </div> -->
       </div>
     </section>
+    <form>
+      <label for="Speech Recognition">Speech Recognition</label>
+      <!-- <input type="text" name="" id="SpeechToText" onclick=record()> -->
+  
+  
+      <!-- <input type="text" name="spoken" id="SpeechToText" onfocus=record() onfocusout=pause() /> -->
+      <input type="text" name="spoken" id="SpeechToText" />
+      <!-- <input type="submit" /> -->
+      <!-- <i class="fa fa-microphone" style="font-size:36px" onclick=toggleRecognition()></i> -->
+      <i class="fa fa-microphone" id="microphone-icon" onmousedown=record() onmouseup=pause()></i>
+      <div id="recording-animation"></div>
+  </form>
     <!-- <section class="my-5 py-5">
       <div class="container">
         <div class="row align-items-center">
