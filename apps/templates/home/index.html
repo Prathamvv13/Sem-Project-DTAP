@@ -61,7 +61,6 @@
     />
   </head>
 
-<<<<<<< HEAD
   <title>
     DTAP | Digital Twin to Assist Presentations
   </title>
@@ -903,13 +902,11 @@
     <!-- <div class="container mt-sm-5">
       <div class="page-header py-6 py-md-5 my-sm-3 mb-3 border-radius-xl" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/assets/img/desktop.jpg');" loading="lazy">
         <span class="mask bg-gradient-dark"></span>
-=======
   <body class="presentation-page bg-gray-200">
     {% include 'includes/navigation.html' %}
     <header class="header-2">
       <div class="page-header min-vh-75 relative">
         <span class="mask bg-gradient-info"></span>
->>>>>>> bb49a5512850b4244d3bbb555b1519a02b3439c6
         <div class="container">
           <div class="row">
             <div class="col-lg-7 text-center mx-auto">
@@ -1066,10 +1063,16 @@
         recognition1.stop();
         console.log("Recognition stopped!");
         var spokenText = document.getElementById("SpeechToText").value;
+        if (spokenText === "Next Slide" || spokenText === "Previous Slide") {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://127.0.0.1:5000/voiceip");
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.send(JSON.stringify({ spoken: spokenText }));
+        }
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("POST", "http://127.0.0.1:5000/voiceip");
+        // xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        // xhr.send(JSON.stringify({ spoken: spokenText }));
 
         // var wave = document.querySelector('.wave');
         // wave.style.opacity = '0';
