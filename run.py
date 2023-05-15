@@ -7,7 +7,7 @@ import os
 from   flask_migrate import Migrate
 from   flask_minify  import Minify
 from   sys import exit
-
+from flask import Flask , render_template , request
 
 from apps.config import config_dict
 from apps import create_app, db
@@ -43,6 +43,25 @@ if DEBUG:
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
 
+@app.route('/upload' , methods = ['POST'])
+def upload():
+    if request.method == "POST":
+        f = request.files['file']
+        f.save(f.filename)
+        print("post")
+        # name = request.form['spoken']
+        # print(name)
+    # return render_template('index.    html')
+    return "success"
+
+@app.route('/voiceip' , methods = ['POST'])
+def voiceip():
+    print('Request received!')
+    data = request.get_json()
+    spoken_text = data['spoken']
+    # spoken_text = request.form['spoken']
+    print(spoken_text) 
+    return spoken_text   
 
 if __name__ == "__main__":
     app.run()

@@ -23,5 +23,3 @@ new_prediction = model.predict(new_features)
 
 print("Prediction:", new_prediction)
 
-import pickle
-model=pickle.load(open'modeltest.py)
