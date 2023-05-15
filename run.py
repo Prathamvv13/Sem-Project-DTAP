@@ -2,12 +2,15 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-from flask import Flask
+from flask import Flask,request
 import os
 from   flask_migrate import Migrate
 from   flask_minify  import Minify
 from   sys import exit
-from flask import Flask , render_template , request
+
+# import win32api
+import os
+
 
 from apps.config import config_dict
 from apps import create_app, db
@@ -43,11 +46,19 @@ if DEBUG:
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
 
+app.config['UPLOAD_FOLDER'] = 'C:\\Users\\HCN\\Desktop\\Uploads'
+# app.config['UPLOAD_FOLDER'] = 'C:'
+# C:\Users\HCN\Desktop\Uploads
 @app.route('/upload' , methods = ['POST'])
 def upload():
     if request.method == "POST":
         f = request.files['file']
-        f.save(f.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], f.filename)
+        f.save(file_path)
+        print("File Path:", file_path)
+        # application = r"C:\Program Files\Microsoft Office\root\OfficeXX\POWERPNT.EXE"
+        # win32api.ShellExecute(0, "open", application, file_path, "", 1)
+        # f.save(f.filename)
         print("post")
         # name = request.form['spoken']
         # print(name)
@@ -62,6 +73,5 @@ def voiceip():
     # spoken_text = request.form['spoken']
     print(spoken_text) 
     return spoken_text   
-
 if __name__ == "__main__":
     app.run()
