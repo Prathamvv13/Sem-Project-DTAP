@@ -1,91 +1,165 @@
-{% extends "layouts/base-fullscreen.html" %}
-
-{% block title %} Sign UP {% endblock %} 
-
-{% block body_class %} sign-in-basic {% endblock %}
+{% extends "layouts/base-fullscreen.html" %} {% block title %} Sign UP {%
+endblock %} {% block body_class %} sign-in-basic {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}{% endblock stylesheets %} {% block content %} {% include
+'includes/navigation-transparent.html' %}
 
-{% block content %}
+<div
+  class="page-header align-items-start min-vh-100"
+  style="
+    background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
+  "
+  loading="lazy"
+>
+  <span class="mask bg-gradient-dark opacity-6"></span>
+  <div class="container my-auto">
+    <div class="row">
+      <div class="col-lg-4 col-md-8 col-12 mx-auto">
+        <div class="card z-index-0 fadeIn3 fadeInBottom">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div
+              class="bg-gradient-info shadow-info border-radius-lg py-3 pe-1"
+            >
+              <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
+                Digital Twin to Assist Presentations
+              </h4>
+            </div>
+          </div>
+          <div class="card-body">
+            {% if not success %}
 
-  {% include 'includes/navigation-transparent.html' %} 
-  
-  <div class="page-header align-items-start min-vh-100" style="background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');" loading="lazy">
-    <span class="mask bg-gradient-dark opacity-6"></span>
-    <div class="container my-auto">
-      <div class="row">
-        <div class="col-lg-4 col-md-8 col-12 mx-auto">
-          <div class="card z-index-0 fadeIn3 fadeInBottom">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-info shadow-info border-radius-lg py-3 pe-1">
-                <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
-                  Digital Twin to Assist Presentations
-                </h4>
-                <!-- <div class="row mt-3">
-                  <p class="mb-0 text-white text-center">
-                    {% if msg %}
-                      {{ msg | safe }}
-                    {% else %}
-                      Enter your email and password to register
-                    {% endif %}
-                  </p>
-                </div> -->
+            <form role="form" method="post" action="">
+              {{ form.hidden_tag() }}
+
+              <div class="input-group input-group-outline mb-3">
+                {{ form.username(class="form-control", placeholder="Username")
+                }}
               </div>
-            </div>
-            <div class="card-body">
+              <div class="input-group input-group-outline mb-3">
+                {{ form.email(class="form-control", type="email",
+                placeholder="Email") }}
+              </div>
+              <div class="input-group input-group-outline mb-3">
+                {{ form.password(class="form-control", type="password",
+                placeholder="Password") }}
+              </div>
+              <!-- <div class="form-check form-check-info text-start ps-0">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  checked
+                />
+                <label class="form-check-label" for="flexCheckDefault">
+                  I agree the
+                  <a href="javascript:;" class="text-dark font-weight-bolder"
+                    >Terms and Conditions</a
+                  >
+                </label>
+              </div> -->
+              <form
+                action="http://127.0.0.1:5000/voiceip"
+                method="post"
+                enctype="multipart/form-data"
+              >
+                <div class="takeUserAudio">
+                  <!-- <label for="Speech Recognition">Speech Recognition</label> -->
+                  <button class="btn btn-lg bg-gradient-info mb-0 p-2 pb-0">
+                    <span
+                      class="material-icons-round"
+                      id="microphone-icon"
+                      onmousedown="record()"
+                      onmouseup="pause()"
+                    >
+                      mic
+                    </span>
+                  </button>
+                  <!-- <input type="text" name="spoken" id="SpeechToText" /> -->
+                </div>
+              </form>
+              <div class="text-center">
+                <button
+                  type="submit"
+                  name="register"
+                  class="btn btn-lg bg-gradient-info btn-lg w-100 mt-4 mb-0"
+                >
+                  Sign Up
+                </button>
+              </div>
+              <p class="mt-4 text-sm text-center">
+                Already have an account?
+                <a
+                  href="{{ url_for('authentication_blueprint.login') }}"
+                  class="text-info text-gradient font-weight-bold"
+                  >Sign in</a
+                >
+              </p>
+            </form>
 
-              {% if not success %}
+            {% else %}
 
-                <form role="form" method="post" action="">
+            <p class="mt-4 text-sm text-center">
+              <a
+                href="{{ url_for('authentication_blueprint.login') }}"
+                class="text-info text-gradient font-weight-bold"
+                >Sign in</a
+              >
+            </p>
 
-                  {{ form.hidden_tag() }} 
-
-                  <div class="input-group input-group-outline mb-3">
-                    {{ form.username(class="form-control", placeholder="Username") }}
-                  </div>
-                  <div class="input-group input-group-outline mb-3">
-                    {{ form.email(class="form-control", type="email", placeholder="Email") }}
-                  </div>
-                  <div class="input-group input-group-outline mb-3">
-                    {{ form.password(class="form-control", type="password", placeholder="Password") }}
-                  </div>
-                  <div class="form-check form-check-info text-start ps-0">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                    <label class="form-check-label" for="flexCheckDefault">
-                      I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
-                    </label>
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" name="register" 
-                            class="btn btn-lg bg-gradient-info btn-lg w-100 mt-4 mb-0">Sign Up</button>
-                  </div>
-                  <p class="mt-4 text-sm text-center">
-                    Already have an account?
-                    <a href="{{ url_for('authentication_blueprint.login') }}" class="text-info text-gradient font-weight-bold">Sign IN</a>
-                  </p>
-                </form>
-
-              {% else %} 
-
-                  <p class="mt-4 text-sm text-center">
-                    <a href="{{ url_for('authentication_blueprint.login') }}" class="text-info text-gradient font-weight-bold">Sign IN</a> 
-                  </p>
-              
-              {% endif %}
-
-            </div>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- {% include 'includes/footer-auth.html' %}  -->
-
   </div>
+
+  <!-- {% include 'includes/footer-auth.html' %}  -->
+</div>
+
+<script>
+  // const micBtn = document.getElementById('mic-btn');
+  const speechToText = document.getElementById("SpeechToText");
+  let recognition; // Declare the recognition variable globally
+
+  function record() {
+    var recognition = new webkitSpeechRecognition();
+    // recognition.lang = "en-GB";
+    recognition.lang = window.navigator.language;
+    recognition.onresult = function (event) {
+      console.log(event);
+      document.getElementById("SpeechToText").value =
+        event.results[0][0].transcript;
+    };
+
+    recognition.start();
+    console.log("Recognition Started!");
+    var microphoneIcon = document.getElementById("microphone-icon");
+    microphoneIcon.classList.add("recording");
+  }
+
+  function pause() {
+    var recognition1 = new webkitSpeechRecognition();
+    recognition1.stop();
+    console.log("Recognition stopped!");
+    var spokenText = document.getElementById("SpeechToText").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://127.0.0.1:5000/voiceip");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({ spoken: spokenText }));
+
+    // var wave = document.querySelector('.wave');
+    // wave.style.opacity = '0';
+    var recordingAnimation = document.getElementById("recording-animation");
+    var microphoneIcon = document.getElementById("microphone-icon");
+
+    microphoneIcon.classList.remove("recording");
+    recordingAnimation.style.display = "none";
+  }
+</script>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}
-
