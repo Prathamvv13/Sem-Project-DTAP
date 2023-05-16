@@ -110,13 +110,27 @@
               <!-- <input action="/present" type="submit" class="btn bg-gradient-info my-2 mb-2"/> -->
               <br>
               <br>
+
+
+              <!-- <label for="Speech Recognition">Speech Recognition</label>
+              <input type="text" name="spoken" id="SpeechToText" /> -->
+              <!-- <input type="submit" /> -->
+              <!-- <i class="fa fa-microphone" style="font-size:36px" onclick=toggleRecognition()></i> -->
+              <!-- <i class="fa fa-microphone" id="microphone-icon" onmousedown=record() onmouseup=pause()></i>
+              <div id="recording-animation"></div> -->
+            </form>
+            <form>
               <label for="Speech Recognition">Speech Recognition</label>
+              <!-- <input type="text" name="" id="SpeechToText" onclick=record()> -->
+      
+      
+              <!-- <input type="text" name="spoken" id="SpeechToText" onfocus=record() onfocusout=pause() /> -->
               <input type="text" name="spoken" id="SpeechToText" />
               <!-- <input type="submit" /> -->
               <!-- <i class="fa fa-microphone" style="font-size:36px" onclick=toggleRecognition()></i> -->
               <i class="fa fa-microphone" id="microphone-icon" onmousedown=record() onmouseup=pause()></i>
               <div id="recording-animation"></div>
-            </form>
+          </form>
           </div>
         </div>
         </div>
@@ -195,25 +209,36 @@
         var recognition1 = new webkitSpeechRecognition();
         recognition1.stop();
         console.log("Recognition stopped!");
-        var spokenText = document.getElementById("SpeechToText").value;
-        if (spokenText === "Next Slide" || spokenText === "Previous Slide") {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://127.0.0.1:5000/voiceip");
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.send(JSON.stringify({ spoken: spokenText }));
+        //previous correct code
+        var spokenText = document.getElementById("SpeechToText").value.toLowerCase().trim();
+        console.log("Spoken Text: " + spokenText);
+
+        if (spokenText.toLowerCase() === "next slide." || spokenText.toLowerCase() === "previous slide.") {
+          console.log("Correct command");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "http://127.0.0.1:5000/voiceip");
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          xhr.send(JSON.stringify({ spoken: spokenText }));
+        } else {
+          // Show an error message for invalid commands
+          console.log("Invalid");
+          var errorMessage = "Invalid command. Please say 'Next slide' or 'Previous slide'.";
+          showToast(errorMessage);
         }
+      // Correct code
         // var xhr = new XMLHttpRequest();
         // xhr.open("POST", "http://127.0.0.1:5000/voiceip");
         // xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         // xhr.send(JSON.stringify({ spoken: spokenText }));
-
-        // var wave = document.querySelector('.wave');
-        // wave.style.opacity = '0';
         var recordingAnimation = document.getElementById("recording-animation");
         var microphoneIcon = document.getElementById("microphone-icon");
 
         recordingAnimation.style.display = "none";
         microphoneIcon.classList.remove("recording");
+      }
+      function showToast(message) {
+        alert(message);
+        var title = "Error"; // Change the title here
       }
     </script>
   </body>
